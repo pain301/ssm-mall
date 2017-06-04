@@ -1,0 +1,22 @@
+*.class
+
+# package file
+*.war
+*.ear
+
+# maven file
+target/
+
+# idea
+.idea/
+/idea/
+*.ipr
+*.iml
+*.iws
+
+# tmp file
+*.cache
+*.log
+*.diff
+*.patch
+*.tmp
