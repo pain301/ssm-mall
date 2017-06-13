@@ -24,6 +24,8 @@
                     </list>
                 </property>
             </bean>
+
+            <!-- 返回对象自动序列化为 json -->
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>

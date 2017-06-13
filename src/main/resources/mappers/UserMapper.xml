@@ -151,4 +151,63 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="checkUsername" resultType="int" parameterType="java.lang.String">
+    SELECT count(1)
+    FROM mall_user
+    WHERE username = #{username}
+  </select>
+
+  <select id="checkEmail" resultType="int" parameterType="java.lang.String">
+    SELECT count(1)
+    FROM mall_user
+    WHERE email = #{email}
+  </select>
+
+  <select id="selectUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM mall_user
+    WHERE username = #{username}
+    AND password = #{password}
+  </select>
+
+  <select id="selectQuestionByUsername" resultType="string" parameterType="java.lang.String">
+    SELECT
+    question
+    FROM mall_user
+    WHERE username = #{username}
+  </select>
+
+  <select id="checkAnswer" resultType="int" parameterType="java.util.Map">
+    SELECT
+    count(1)
+    FROM mall_user
+    WHERE username = #{username}
+    AND question = #{question}
+    AND answer = #{answer}
+  </select>
+
+  <update id="updatePasswordByUsername" parameterType="java.util.Map">
+    UPDATE mall_user
+    SET password = #{password}, update_time = now()
+    WHERE username = #{username}
+  </update>
+
+  <select id="checkPassword" resultType="int" parameterType="java.util.Map">
+    SELECT
+    count(1)
+    FROM mall_user
+    WHERE id = #{userId}
+    AND password = #{password}
+  </select>
+
+  <select id="checkEmailByUserId" resultType="int" parameterType="java.util.Map">
+    SELECT
+    count(1)
+    FROM mall_user
+    WHERE email = #{email}
+    AND userId = #{userId}
+  </select>
+
 </mapper>

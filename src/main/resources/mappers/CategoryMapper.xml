@@ -116,4 +116,12 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectChildrenCategoryByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM mall_category
+    WHERE parent_id = #{parentId}
+  </select>
+
 </mapper>
