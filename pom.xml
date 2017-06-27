@@ -49,12 +49,7 @@
       <version>${org.springframework.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <version>${org.springframework.version}</version>
-    </dependency>
-
+    <!-- AOP -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
@@ -66,6 +61,7 @@
       <version>1.6.11</version>
     </dependency>
 
+    <!-- mybatis -->
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis-spring</artifactId>
@@ -83,6 +79,7 @@
       <version>1.9.12</version>
     </dependency>
 
+    <!-- 数据源 -->
     <dependency>
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
@@ -114,37 +111,16 @@
       <version>20.0</version>
     </dependency>
 
+    <!-- commons -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.5</version>
     </dependency>
-
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.2.1</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <!--<scope>test</scope>-->
-    </dependency>
-
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.3</version>
-    </dependency>
-
-    <!-- id加密解密 -->
-    <dependency>
-      <groupId>org.hashids</groupId>
-      <artifactId>hashids</artifactId>
-      <version>1.0.1</version>
     </dependency>
 
     <!-- ftpclient -->
@@ -166,6 +142,32 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.0.1</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <!--<scope>test</scope>-->
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.3</version>
+    </dependency>
+
+    <!-- id加密解密 -->
+    <dependency>
+      <groupId>org.hashids</groupId>
+      <artifactId>hashids</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <!-- mybatis pager -->
@@ -222,6 +224,7 @@
       <version>1.3</version>
     </dependency>
 
+    <!-- redis -->
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
