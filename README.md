@@ -65,6 +65,7 @@ SQL 语句
 #### 公共 properties
 
 
+http://mirrors.aliyun.com/
 ## 源配置
 ### 备份
 ```sh
@@ -194,8 +195,7 @@ ftpuser
 
 # 检查 SELINUX 为 disable
 sudo vim /etc/selinux/config
-SELINUX=disable
-SELINUX=disabled ?
+SELINUX=disabled
 
 sudo setenforce 0
 
