@@ -66,3 +66,15 @@ ApplicationContext ctx = new ClassPathXmlApplicationContext("com/pain/context/be
 
 ### WebApplicationContext
 `WebApplicationContext` 需要 `ServletContext` 实例，必须在拥有 `Web` 容器的前提下才能完成启动工作
+
+### Bean 依赖
+`sysInit` 为 `manager` 的前置依赖，`sysInit` 会先于 `manager` 创建
+```xml
+<bean id="manager" class="com.pain.CacheManager" depends-on="sysInit" />
+<bean id="sysInit" class="com.pain.sysInit" />
+```
+
+### 组合配置文件
+```xml
+<import resource="classpath:com/pain/beans.xml" />
+```

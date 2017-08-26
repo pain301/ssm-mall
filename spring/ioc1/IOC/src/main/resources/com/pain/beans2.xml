@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <bean id="student" class="com.pain.Student" p:books="《Linux》,《Unix Art》">
+        <property name="courses">
+            <list>
+                <value>语文</value>
+                <value>数学</value>
+                <value>物理</value>
+            </list>
+        </property>
+        <property name="favorites">
+            <set>
+                <value>music</value>
+                <value>sports</value>
+                <value>game</value>
+            </set>
+        </property>
+        <property name="scores">
+            <map>
+                <entry key="数学" value="120.5" />
+                <entry key="语文" value="110.5" />
+                <entry key="物理" value="105.5" />
+            </map>
+        </property>
+        <property name="emails">
+            <props>
+                <prop key="studyMaile">study@gamil.com</prop>
+                <prop key="lifeMaile">life@gamil.com</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>
