@@ -3,6 +3,7 @@ package com.pain.mall.common;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,18 +15,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class TokenCache {
     private static final Logger logger = LoggerFactory.getLogger(TokenCache.class);
+
     private static final String TOKEN_PREFIX = "token_";
 
     private static LoadingCache<String, String> localCache = CacheBuilder
             .newBuilder()
             .initialCapacity(1000)
             .maximumSize(10000)
-            .expireAfterAccess(12, TimeUnit.HOURS)
+            .expireAfterAccess(1, TimeUnit.MINUTES)
             .build(new CacheLoader<String, String>() {
                 // 缓存没有命中执行返回
                 @Override
                 public String load(String s) throws Exception {
-                    return null;
+                    return "null";
                 }
             });
 
@@ -34,14 +36,21 @@ public class TokenCache {
     }
 
     public static String getKey(String key) {
-        String tokenValue = null;
+        String tokenValue = "null";
         try {
             tokenValue = localCache.get(TOKEN_PREFIX + key);
         } catch (ExecutionException e) {
-            logger.error("localCache get error",e);
+            logger.error("localCache get error", e);
+        }
+
+        // 存放 null 会导致 NPE
+        // localCache.put(TOKEN_PREFIX + key, null);
+        localCache.refresh(TOKEN_PREFIX + key);
+
+        if (StringUtils.equals(tokenValue, "null")) {
+            return null;
         }
 
         return tokenValue;
     }
-
 }

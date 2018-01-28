@@ -19,13 +19,13 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(value = "productDetail", method = {RequestMethod.GET})
+    @RequestMapping(value = "detail", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse productDetail(Integer productId) {
         return productService.productDetail(productId);
     }
 
-    @RequestMapping(value = "searchProduct", method = {RequestMethod.POST})
+    @RequestMapping(value = "search", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse searchProduct(@RequestParam(value = "keyword", required = false) String keyword,
                                         @RequestParam(value = "categoryId", required = false) Integer categoryId,

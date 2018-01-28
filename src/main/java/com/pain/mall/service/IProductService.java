@@ -10,9 +10,9 @@ import com.pain.mall.vo.ProductDetailVo;
  */
 public interface IProductService {
 
-    public ServerResponse<String> addOrUpdateProduct(Product product);
+    public ServerResponse addOrUpdateProduct(Product product);
 
-    public ServerResponse<String> setSaleStatus(Integer productId, Integer status);
+    public ServerResponse setSaleStatus(Integer productId, Integer status);
 
     public ServerResponse<ProductDetailVo> manageProductDetail(Integer productId);
 

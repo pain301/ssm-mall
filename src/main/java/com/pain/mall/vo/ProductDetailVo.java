@@ -6,6 +6,7 @@ import java.math.BigDecimal;
  * Created by Administrator on 2017/6/15.
  */
 public class ProductDetailVo {
+
     private Integer id;
     private Integer categoryId;
     private String name;
@@ -16,6 +17,7 @@ public class ProductDetailVo {
     private BigDecimal price;
     private Integer stock;
     private Integer status;
+
     private String createTime;
     private String updateTime;
 

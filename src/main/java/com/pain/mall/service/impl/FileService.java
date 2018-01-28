@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 /**
@@ -25,21 +24,33 @@ public class FileService implements IFileService {
         String extName = fileName.substring(fileName.lastIndexOf(".") + 1);
         String uploadFileName = UUID.randomUUID().toString() + "." + extName;
 
+        logger.info("上传文件名: {}, 上传路径: {}, 新文件名: {}", fileName, path, uploadFileName);
+
+        // TODO 多线程问题
         File fileDir = new File(path);
         if (!fileDir.exists()) {
             fileDir.setWritable(true);
             fileDir.mkdirs();
         }
+
         File targetFile = new File(path, uploadFileName);
         try {
             file.transferTo(targetFile);
-
             FTPUtil.uploadFile(Lists.newArrayList(targetFile));
             targetFile.delete();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("文件上传失败", e);
         }
 
         return targetFile.getName();
+    }
+
+    public static void main(String[] args) throws IOException {
+        File targetFile = new File("log.md");
+        FTPUtil.uploadFile(Lists.newArrayList(targetFile));
+//        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("hello.txt"));
+//        osw.write("hello");
+//        osw.close();
+//        System.out.println(targetFile.getAbsolutePath());
     }
 }

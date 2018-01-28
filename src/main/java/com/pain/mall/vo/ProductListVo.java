@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by Administrator on 2017/6/15.
  */
-public class ProductVo {
+public class ProductListVo {
     private Integer id;
     private Integer categoryId;
     private String name;
@@ -13,6 +13,7 @@ public class ProductVo {
     private String mainImage;
     private BigDecimal price;
     private Integer status;
+
     private String imageHost;
 
     public Integer getId() {

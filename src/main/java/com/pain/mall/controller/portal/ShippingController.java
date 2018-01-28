@@ -6,7 +6,7 @@ import com.pain.mall.common.ResponseCode;
 import com.pain.mall.common.ServerResponse;
 import com.pain.mall.pojo.Shipping;
 import com.pain.mall.pojo.User;
-import com.pain.mall.service.impl.ShippingService;
+import com.pain.mall.service.IShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +24,9 @@ import javax.servlet.http.HttpSession;
 public class ShippingController {
 
     @Autowired
-    private ShippingService shippingService;
+    private IShippingService shippingService;
 
-    @RequestMapping(value = "/add", method = {RequestMethod.POST})
+    @RequestMapping(value = "add", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse add(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -36,17 +36,17 @@ public class ShippingController {
         return shippingService.add(user.getId(), shipping);
     }
 
-    @RequestMapping(value = "/del", method = {RequestMethod.POST})
+    @RequestMapping(value = "delete", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse del(HttpSession session, Integer shippingId) {
+    public ServerResponse delete(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
-        return shippingService.del(user.getId(), shippingId);
+        return shippingService.delete(user.getId(), shippingId);
     }
 
-    @RequestMapping(value = "/update", method = {RequestMethod.POST})
+    @RequestMapping(value = "update", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse update(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -56,7 +56,7 @@ public class ShippingController {
         return shippingService.update(user.getId(), shipping);
     }
 
-    @RequestMapping(value = "/select", method = {RequestMethod.GET})
+    @RequestMapping(value = "select", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse<Shipping> select(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -66,7 +66,7 @@ public class ShippingController {
         return shippingService.select(user.getId(), shippingId);
     }
 
-    @RequestMapping(value = "/list", method = {RequestMethod.GET})
+    @RequestMapping(value = "list", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,

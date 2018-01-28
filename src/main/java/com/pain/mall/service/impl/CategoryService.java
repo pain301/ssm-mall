@@ -8,12 +8,14 @@ import com.pain.mall.pojo.Category;
 import com.pain.mall.service.ICategoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by Administrator on 2017/6/12.
@@ -24,8 +26,10 @@ public class CategoryService implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    private Logger logger = LoggerFactory.getLogger(CategoryService.class);
+
     @Override
-    public ServerResponse<String> addCategory(String categoryName, Integer parentId) {
+    public ServerResponse addCategory(String categoryName, Integer parentId) {
         if (null == parentId || StringUtils.isBlank(categoryName)) {
             return ServerResponse.createByErrorMsg("品类参数错误");
         }
@@ -33,6 +37,8 @@ public class CategoryService implements ICategoryService {
         Category category = new Category();
         category.setName(categoryName);
         category.setParentId(parentId);
+
+        // TODO sort order 设置
         category.setStatus(true);
 
         int count = categoryMapper.insert(category);
@@ -43,11 +49,13 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public ServerResponse<String> updateCategoryName(Integer categoryId, String categoryName) {
+    public ServerResponse updateCategoryName(Integer categoryId, String categoryName) {
         if (null == categoryId || StringUtils.isBlank(categoryName)) {
             return ServerResponse.createByErrorMsg("品类参数错误");
         }
         Category category = new Category();
+
+        // 防止漏洞
         category.setId(categoryId);
         category.setName(categoryName);
 
@@ -59,47 +67,37 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId) {
-        List<Category> categoryList = categoryMapper.selectChildrenCategoryByParentId(categoryId);
+    public ServerResponse<List<Category>> getChildCategory(Integer categoryId) {
+        List<Category> categoryList = categoryMapper.selectChildCategoryByParentId(categoryId);
         if (CollectionUtils.isEmpty(categoryList)) {
-            // TODO logger empty
+            logger.info("Category {} have no children category", categoryId);
         }
         return ServerResponse.createBySuccess(categoryList);
     }
 
     @Override
-    public ServerResponse<List<Integer>> getAllChildrenCategory(Integer categoryId) {
+    public ServerResponse<List<Integer>> getDeepChildCategory(Integer categoryId) {
         Set<Category> categorySet = Sets.newHashSet();
-        getChildrenCategory(categorySet, categoryId);
+        getChildCategory(categorySet, categoryId);
 
         List<Integer> categoryIdList = Lists.newArrayList();
         if (null != categoryId) {
-            for (Category category : categorySet) {
-                categoryIdList.add(category.getId());
-            }
+            categoryIdList.addAll(
+                    categorySet.stream().map(Category::getId).collect(Collectors.toList()));
         }
         return ServerResponse.createBySuccess(categoryIdList);
     }
 
-    // TODO performance
-    private void getChildrenCategory(Set<Category> categorySet, Integer categoryId) {
+    private void getChildCategory(Set<Category> categorySet, Integer categoryId) {
         Category category = categoryMapper.selectByPrimaryKey(categoryId);
-        if (null != category) {
-            categorySet.add(category);
-            List<Category> categoryList = categoryMapper.selectChildrenCategoryByParentId(categoryId);
-            for (Category categoryItem : categoryList) {
-                getChildrenCategory(categorySet, categoryItem.getId());
-            }
-        }
-    }
 
-    private void getChildrenCategory(Set<Category> categorySet, Category category) {
         if (null != category) {
             categorySet.add(category);
-            List<Category> categoryList = categoryMapper.selectChildrenCategoryByParentId(category.getId());
-            for (Category categoryItem : categoryList) {
-                getChildrenCategory(categorySet, categoryItem);
-            }
+        }
+
+        List<Category> categoryList = categoryMapper.selectChildCategoryByParentId(categoryId);
+        for (Category categoryItem : categoryList) {
+            getChildCategory(categorySet, categoryItem.getId());
         }
     }
 }

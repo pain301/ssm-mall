@@ -10,7 +10,7 @@ import com.pain.mall.pojo.Shipping;
 public interface IShippingService {
     public ServerResponse add(Integer userId, Shipping shipping);
 
-    public ServerResponse del(Integer userId, Integer shippingId);
+    public ServerResponse delete(Integer userId, Integer shippingId);
 
     public ServerResponse update(Integer userId, Shipping shipping);
 

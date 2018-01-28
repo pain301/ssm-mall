@@ -30,6 +30,7 @@ public class DateTimeUtil {
         if (null == date) {
             return StringUtils.EMPTY;
         }
+
         DateTime dateTime = new DateTime(date);
         return dateTime.toString(format);
     }
@@ -38,6 +39,7 @@ public class DateTimeUtil {
         if (null == date) {
             return StringUtils.EMPTY;
         }
+
         DateTime dateTime = new DateTime(date);
         return dateTime.toString(STANDARD_FORMAT);
     }

@@ -5,7 +5,6 @@ import com.pain.mall.common.ResponseCode;
 import com.pain.mall.common.ServerResponse;
 import com.pain.mall.pojo.User;
 import com.pain.mall.service.IUserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "/login/", method = {RequestMethod.POST})
+    @RequestMapping(value = "login", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session) {
         ServerResponse<User> response = userService.login(username, password);
@@ -34,26 +33,26 @@ public class UserController {
         return response;
     }
 
-    @RequestMapping(value = "/logout/", method = {RequestMethod.GET})
+    @RequestMapping(value = "logout", method = {RequestMethod.GET})
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session) {
+    public ServerResponse logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
 
-    @RequestMapping(value = "/register/", method = {RequestMethod.POST})
+    @RequestMapping(value = "register", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<String> register(User user) {
+    public ServerResponse register(User user) {
         return userService.register(user);
     }
 
-    @RequestMapping(value = "/checkValid", method = {RequestMethod.GET})
+    @RequestMapping(value = "/check_valid", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<String> checkValid(String tag, String type) {
-        return userService.checkValid(tag, type);
+    public ServerResponse checkValid(String type, String tag) {
+        return userService.checkValid(type, tag);
     }
 
-    @RequestMapping(value = "/getUserInfo/", method = {RequestMethod.GET})
+    @RequestMapping(value = "get_user_info", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -63,27 +62,27 @@ public class UserController {
         return ServerResponse.createByErrorMsg("用户未登录");
     }
 
-    @RequestMapping(value = "/forgetGetQuestion/", method = {RequestMethod.GET})
+    @RequestMapping(value = "forget_get_question", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username) {
         return userService.selectQuestion(username);
     }
 
-    @RequestMapping(value = "/forgetCheckAnswer/", method = {RequestMethod.GET})
+    @RequestMapping(value = "forget_check_answer", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username, String question, String answer) {
         return userService.checkAnswer(username, question, answer);
     }
 
-    @RequestMapping(value = "/forgetResetPassword/", method = {RequestMethod.GET})
+    @RequestMapping(value = "forget_reset_password", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<String> forgetResetPassword(String username, String password, String forgetToken) {
+    public ServerResponse forgetResetPassword(String username, String password, String forgetToken) {
         return userService.forgetResetPassword(username, password, forgetToken);
     }
 
-    @RequestMapping(value = "/resetPassword/", method = {RequestMethod.GET})
+    @RequestMapping(value = "reset_password", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, HttpSession session) {
+    public ServerResponse resetPassword(String passwordOld, String passwordNew, HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (null == user) {
             return ServerResponse.createByErrorMsg("用户未登录");
@@ -91,7 +90,7 @@ public class UserController {
         return userService.resetPassword(passwordOld, passwordNew, user);
     }
 
-    @RequestMapping(value = "/updateInformation/", method = {RequestMethod.GET})
+    @RequestMapping(value = "update_information", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse<User> updateInformation(HttpSession session, User user) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -101,6 +100,9 @@ public class UserController {
 
         // 防止越权
         user.setId(currentUser.getId());
+        user.setRole(currentUser.getRole());
+
+        // 不允许改变用户名
         user.setUsername(currentUser.getUsername());
         ServerResponse<User> response = userService.updateInformation(user);
         if (response.isSuccess()) {
@@ -109,13 +111,14 @@ public class UserController {
         return response;
     }
 
-    @RequestMapping(value = "/getInformation/", method = {RequestMethod.GET})
+    @RequestMapping(value = "get_information", method = {RequestMethod.GET})
     @ResponseBody
     public ServerResponse<User> getInformation(HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (null == currentUser) {
-            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "用户为登录");
+            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         }
         return userService.getInformation(currentUser.getId());
     }
+
 }

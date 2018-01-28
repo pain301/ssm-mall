@@ -13,7 +13,7 @@ public interface ICategoryService {
 
     public ServerResponse<String> updateCategoryName(Integer categoryId, String categoryName);
 
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
+    public ServerResponse<List<Category>> getChildCategory(Integer categoryId);
 
-    public ServerResponse<List<Integer>> getAllChildrenCategory(Integer categoryId);
+    public ServerResponse<List<Integer>> getDeepChildCategory(Integer categoryId);
 }

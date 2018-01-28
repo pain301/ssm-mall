@@ -26,6 +26,7 @@ public class ShippingService implements IShippingService {
     public ServerResponse add(Integer userId, Shipping shipping) {
         shipping.setUserId(userId);
         int count = shippingMapper.insert(shipping);
+
         if (0 >= count) {
             return ServerResponse.createByErrorMsg("添加地址失败");
         } else {
@@ -36,8 +37,9 @@ public class ShippingService implements IShippingService {
     }
 
     @Override
-    public ServerResponse del(Integer userId, Integer shippingId) {
+    public ServerResponse delete(Integer userId, Integer shippingId) {
         int count = shippingMapper.deleteByUserIdShippingId(userId, shippingId);
+
         if (0 >= count) {
             return ServerResponse.createByErrorMsg("删除地址失败");
         } else {
@@ -49,6 +51,7 @@ public class ShippingService implements IShippingService {
     public ServerResponse update(Integer userId, Shipping shipping) {
         shipping.setUserId(userId);
         int count = shippingMapper.updateByShipping(shipping);
+
         if (0 >= count) {
             return ServerResponse.createByErrorMsg("更新地址失败");
         } else {
@@ -59,6 +62,7 @@ public class ShippingService implements IShippingService {
     @Override
     public ServerResponse<Shipping> select(Integer userId, Integer shippingId) {
         Shipping shipping = shippingMapper.selectByUserIdShippingId(userId, shippingId);
+
         if (null == shipping) {
             return ServerResponse.createByErrorMsg("查询地址失败");
         } else {

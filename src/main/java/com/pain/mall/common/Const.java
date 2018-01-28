@@ -57,4 +57,119 @@ public class Const {
             this.code = code;
         }
     }
+
+    public enum OrderStatus {
+        CANCELED(0, "已取消"),
+        NO_PAY(10, "未支付"),
+        PAID(20, "已支付"),
+        SHIPPED(40, "已发货"),
+        ORDER_SUCCESS(50, "订单完成"),
+        ORDER_CLOSED(60, "订单关闭");
+
+        private int code;
+        private String value;
+
+        public static OrderStatus codeOf(int code) {
+            for (OrderStatus orderStatus : OrderStatus.values()) {
+                if (code == orderStatus.getCode()) {
+                    return orderStatus;
+                }
+            }
+            throw new RuntimeException("没有对应的订单类型");
+        }
+
+        OrderStatus(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    public enum PayPlatform {
+        ALIPAY(1, "支付宝");
+
+        private int code;
+        private String value;
+
+        PayPlatform(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+    }
+
+    public enum PaymentType {
+        ONLINE_PYA(1, "在线支付");
+
+        private int code;
+        private String value;
+
+        public static PaymentType codeOf(int code) {
+            for (PaymentType paymentType : values()) {
+                if (code == paymentType.getCode()) {
+                    return paymentType;
+                }
+            }
+            throw new RuntimeException("没有对应的支付类型");
+        }
+
+        PaymentType(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    public interface AlipayCallback {
+        String WAIT_BUYER_PAY_STATUS = "WAIT_BUYER_PAY";
+        String TRADE_SUCCESS_STATUS = "TRADE_SUCCESS";
+
+        String RESPONSE_SUCCESS = "success";
+        String RESPONSE_FAILED = "failed";
+    }
 }

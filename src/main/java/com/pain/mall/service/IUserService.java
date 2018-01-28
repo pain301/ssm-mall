@@ -7,23 +7,23 @@ import com.pain.mall.pojo.User;
  * Created by Administrator on 2017/6/7.
  */
 public interface IUserService {
-    public ServerResponse<User> login(String username, String password);
+    ServerResponse<User> login(String username, String password);
 
-    public ServerResponse<String> register(User user);
+    ServerResponse register(User user);
 
-    public ServerResponse<String> checkValid(String tag, String type);
+    ServerResponse checkValid(String tag, String type);
 
-    public ServerResponse<String> selectQuestion(String username);
+    ServerResponse<String> selectQuestion(String username);
 
-    public ServerResponse<String> checkAnswer(String username, String question, String answer);
+    ServerResponse<String> checkAnswer(String username, String question, String answer);
 
-    public ServerResponse<String> forgetResetPassword(String username, String password, String forgetToken);
+    ServerResponse forgetResetPassword(String username, String password, String forgetToken);
 
-    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user);
+    ServerResponse resetPassword(String passwordOld, String passwordNew, User user);
 
-    public ServerResponse<User> updateInformation(User user);
+    ServerResponse<User> updateInformation(User user);
 
-    public ServerResponse<User> getInformation(Integer userId);
+    ServerResponse<User> getInformation(Integer userId);
 
-    public ServerResponse<String> checkAdminRole(User user);
+    ServerResponse<String> checkAdminRole(User user);
 }

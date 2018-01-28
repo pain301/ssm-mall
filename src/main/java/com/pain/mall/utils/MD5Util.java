@@ -31,22 +31,22 @@ public class MD5Util {
         return hexDigits[d1] + hexDigits[d2];
     }
 
-    private static String MD5Encode(String origin, String charsetname) {
+    private static String MD5Encode(String origin, String charset) {
         String resultString = null;
         try {
             resultString = new String(origin);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            if (charsetname == null || "".equals(charsetname))
+            if (charset == null || "".equals(charset))
                 resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
             else
-                resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetname)));
+                resultString = byteArrayToHexString(md.digest(resultString.getBytes(charset)));
         } catch (Exception exception) {
         }
         return resultString.toUpperCase();
     }
 
     public static String MD5EncodeUtf8(String origin) {
-//        origin = origin + PropertiesUtil.getProperty("password.salt", "");
+        origin = origin + PropertiesUtil.getValue("password.salt", "");;
         return MD5Encode(origin, "utf-8");
     }
 

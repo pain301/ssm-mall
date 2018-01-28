@@ -3,7 +3,7 @@ package com.pain.mall.controller.backend;
 import com.pain.mall.common.Const;
 import com.pain.mall.common.ServerResponse;
 import com.pain.mall.pojo.User;
-import com.pain.mall.service.impl.UserService;
+import com.pain.mall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +16,12 @@ import javax.servlet.http.HttpSession;
  * Created by Administrator on 2017/6/11.
  */
 @Controller
-@RequestMapping("/manager/user")
+@RequestMapping("/manage/user")
 public class UserManagerController {
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
-    @RequestMapping(value = "/login/", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session) {
         ServerResponse<User> response = userService.login(username, password);

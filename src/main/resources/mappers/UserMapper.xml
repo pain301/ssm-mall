@@ -207,7 +207,7 @@
     count(1)
     FROM mall_user
     WHERE email = #{email}
-    AND userId = #{userId}
+    AND id != #{userId}
   </select>
 
 </mapper>

@@ -41,8 +41,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ServerResponse<String> register(User user) {
-        ServerResponse<String> validResponse = checkValid(Const.USERNAME, user.getUsername());
+    public ServerResponse register(User user) {
+        ServerResponse validResponse = checkValid(Const.USERNAME, user.getUsername());
         if (!validResponse.isSuccess()) {
             return validResponse;
         }
@@ -62,7 +62,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ServerResponse<String> checkValid(String tag, String type) {
+    public ServerResponse checkValid(String type, String tag) {
         if (StringUtils.isNoneBlank(type)) {
             if (Const.USERNAME.equals(type)) {
                 int count = userMapper.checkUsername(tag);
@@ -71,8 +71,8 @@ public class UserService implements IUserService {
                 }
             }
             if (Const.EMAIL.equals(type)) {
-                int coount = userMapper.checkEmail(tag);
-                if (0 < coount) {
+                int count = userMapper.checkEmail(tag);
+                if (0 < count) {
                     return ServerResponse.createByErrorMsg("邮箱已注册");
                 }
             }
@@ -84,7 +84,7 @@ public class UserService implements IUserService {
 
     @Override
     public ServerResponse<String> selectQuestion(String username) {
-        ServerResponse response = checkValid(username, Const.USERNAME);
+        ServerResponse response = checkValid(Const.USERNAME, username);
         if (response.isSuccess()) {
             return ServerResponse.createByErrorMsg("用户名不存在");
         }
@@ -100,25 +100,29 @@ public class UserService implements IUserService {
         int count = userMapper.checkAnswer(username, question, answer);
         if (0 < count) {
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(username, forgetToken);
+            TokenCache.setKey(username,
+                    forgetToken);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMsg("问题答案错误");
     }
 
     @Override
-    public ServerResponse<String> forgetResetPassword(String username, String password, String forgetToken) {
+    public ServerResponse forgetResetPassword(String username, String password, String forgetToken) {
         if (StringUtils.isBlank(forgetToken)) {
             return ServerResponse.createByErrorMsg("参数错误");
         }
-        ServerResponse<String> response = checkValid(Const.USERNAME, username);
+
+        ServerResponse response = checkValid(Const.USERNAME, username);
         if (response.isSuccess()) {
             return ServerResponse.createByErrorMsg("用户名不存在");
         }
+
         String token = TokenCache.getKey(username);
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorMsg("Token 过期或失效");
         }
+
         if (StringUtils.equals(token, forgetToken)) {
             String md5Password = MD5Util.MD5EncodeUtf8(password);
             int count = userMapper.updatePasswordByUsername(username, md5Password);
@@ -133,7 +137,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
+    public ServerResponse resetPassword(String passwordOld, String passwordNew, User user) {
         int count = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
         if (0 >= count) {
             return ServerResponse.createByErrorMsg("旧密码错误");
@@ -143,13 +147,17 @@ public class UserService implements IUserService {
         if (0 >= count) {
             return ServerResponse.createByErrorMsg("密码重置失败");
         }
+
+        // 防止再次请求查看是否会泄露秘密
+        user.setPassword("");
+
         return ServerResponse.createBySuccessMsg("密码重置成功");
     }
 
     @Override
     public ServerResponse<User> updateInformation(User user) {
         int count = userMapper.checkEmailByUserId(user.getEmail(), user.getId());
-        if (0 <= count) {
+        if (0 < count) {
             return ServerResponse.createByErrorMsg("Email 已被占用");
         }
 
@@ -161,9 +169,13 @@ public class UserService implements IUserService {
         updateUser.setAnswer(user.getAnswer());
 
         count = userMapper.updateByPrimaryKeySelective(updateUser);
-        if (0 <= count) {
+        if (0 >= count) {
             return ServerResponse.createByErrorMsg("更新信息失败");
         }
+
+        updateUser.setUsername(user.getUsername());
+        updateUser.setRole(user.getRole());
+        updateUser.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess("更新信息成功", updateUser);
     }
 
@@ -177,6 +189,7 @@ public class UserService implements IUserService {
         return ServerResponse.createBySuccess(user);
     }
 
+    // for manage
     @Override
     public ServerResponse<String> checkAdminRole(User user) {
         if (null != user && user.getRole() == Const.Role.ROLE_ADMIN) {
