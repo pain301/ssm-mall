@@ -29,7 +29,6 @@ import com.pain.mall.vo.OrderVo;
 import com.pain.mall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +150,7 @@ public class OrderService implements IOrderService {
 
         orderProductVo.setProductTotalPrice(payment);
         orderProductVo.setOrderItemVoList(orderItemVoList);
-        orderProductVo.setImageHost(PropertiesUtil.getValue("ftp.server.http.prefix"));
+        orderProductVo.setImageHost(PropertiesUtil.getString("ftp.server.http.prefix"));
 
         return ServerResponse.createBySuccess(orderProductVo);
     }
@@ -171,7 +170,7 @@ public class OrderService implements IOrderService {
         orderVo.setSendTime(DateTimeUtil.dateToStr(order.getSendTime()));
         orderVo.setCloseTime(DateTimeUtil.dateToStr(order.getCloseTime()));
         orderVo.setEndTime(DateTimeUtil.dateToStr(order.getEndTime()));
-        orderVo.setImageHost(PropertiesUtil.getValue("ftp.server.http.prefix"));
+        orderVo.setImageHost(PropertiesUtil.getString("ftp.server.http.prefix"));
         orderVo.setShippingId(order.getShippingId());
 
         Shipping shipping = shippingMapper.selectByPrimaryKey(order.getShippingId());
@@ -467,7 +466,7 @@ public class OrderService implements IOrderService {
                 .setOperatorId(operatorId).setStoreId(storeId).setExtendParams(extendParams)
                 .setTimeoutExpress(timeoutExpress)
                 // 支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
-                .setNotifyUrl(PropertiesUtil.getValue("alipay.callback.url", ""))
+                .setNotifyUrl(PropertiesUtil.getString("alipay.callback.url", ""))
                 .setGoodsDetailList(goodsDetailList);
 
         AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);
@@ -501,7 +500,7 @@ public class OrderService implements IOrderService {
 
                 logger.info("qrPath:" + qrPath);
 
-                String qrUrl = PropertiesUtil.getValue("ftp.server.http.prefix") + targetFile.getName();
+                String qrUrl = PropertiesUtil.getString("ftp.server.http.prefix") + targetFile.getName();
                 resultMap.put("quUrl", qrUrl);
                 return ServerResponse.createBySuccess(resultMap);
 

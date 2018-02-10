@@ -188,7 +188,7 @@ public class CartService implements ICartService {
         cartVo.setCartProductVoList(cartProductVoList);
         cartVo.setTotalCartPrice(totalCartPrice);
         cartVo.setAllChecked(getAllCheckedStatus(userId));
-        cartVo.setImageHost(PropertiesUtil.getValue("ftp.server.http.prefix"));
+        cartVo.setImageHost(PropertiesUtil.getString("ftp.server.http.prefix"));
 
         return cartVo;
     }

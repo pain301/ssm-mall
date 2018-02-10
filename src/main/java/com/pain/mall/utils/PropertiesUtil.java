@@ -17,7 +17,7 @@ public class PropertiesUtil {
     private static Properties properties;
 
     // TODO CHECK
-    // 只在加载执行一次
+    // 只加载执行一次
     static {
         String fileName = "mall.properties";
         properties = new Properties();
@@ -29,7 +29,7 @@ public class PropertiesUtil {
         }
     }
 
-    public static  String getValue(String key) {
+    public static String getString(String key) {
 
         if (StringUtils.isBlank(key)) {
             return null;
@@ -42,7 +42,7 @@ public class PropertiesUtil {
         return value.trim();
     }
 
-    public static String getValue(String key, String defaultValue) {
+    public static String getString(String key, String defaultValue) {
         if (StringUtils.isBlank(key)) {
             return null;
         }
@@ -53,4 +53,57 @@ public class PropertiesUtil {
         }
         return value.trim();
     }
+
+    public static Integer getInt(String key) {
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        String value = properties.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+
+        return Integer.valueOf(value);
+    }
+
+    public static Integer getInt(String key, Integer defaultValue) {
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        String value = properties.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+
+        return Integer.valueOf(value);
+    }
+
+    public static Boolean getBool(String key) {
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        String value = properties.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+
+        return Boolean.valueOf(value);
+    }
+
+    public static Boolean getBool(String key, Boolean defaultValue) {
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        String value = properties.getProperty(key.trim());
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+
+        return Boolean.valueOf(value);
+    }
+
 }

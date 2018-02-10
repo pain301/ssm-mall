@@ -133,7 +133,7 @@ public class ProductManagerController {
             String path = request.getServletContext().getRealPath("upload");
             String targetFileName = fileService.upload(file, path);
 
-            String url = PropertiesUtil.getValue("ftp.server.http.prefix") + targetFileName;
+            String url = PropertiesUtil.getString("ftp.server.http.prefix") + targetFileName;
             Map fileMap = new HashMap<>();
             fileMap.put("uri", targetFileName);
             fileMap.put("url", url);
@@ -168,7 +168,7 @@ public class ProductManagerController {
                 return map;
             }
 
-            String url = PropertiesUtil.getValue("ftp.server.http.prefix") + targetFileName;
+            String url = PropertiesUtil.getString("ftp.server.http.prefix") + targetFileName;
             map.put("success", true);
             map.put("msg", "上传文件成功");
             map.put("path", url);
