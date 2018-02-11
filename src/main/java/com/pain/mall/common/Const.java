@@ -14,6 +14,12 @@ public class Const {
 
     public static final String EMAIL = "email";
 
+    public static final String TOKEN_PREFIX = "token_";
+
+    public interface RedisCacheTime {
+        int REDIS_SESSION_TIME = 30 * 60;
+    }
+
     public interface Role {
         int ROLE_CUSTOMER = 0;
         int ROLE_ADMIN = 1;

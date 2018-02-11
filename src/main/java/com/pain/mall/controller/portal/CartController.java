@@ -5,14 +5,18 @@ import com.pain.mall.common.ResponseCode;
 import com.pain.mall.common.ServerResponse;
 import com.pain.mall.pojo.User;
 import com.pain.mall.service.ICartService;
+import com.pain.mall.utils.CookieUtil;
+import com.pain.mall.utils.JsonUtil;
+import com.pain.mall.utils.RedisPoolUtil;
 import com.pain.mall.vo.CartVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Administrator on 2017/6/17.
@@ -26,8 +30,16 @@ public class CartController {
 
     @RequestMapping(value = "add", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> add(HttpSession session, Integer productId, Integer count) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> add(HttpServletRequest request, Integer productId, Integer count) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -36,8 +48,16 @@ public class CartController {
 
     @RequestMapping(value = "update", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> update(HttpSession session, Integer productId, Integer count) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> update(HttpServletRequest request, Integer productId, Integer count) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -46,8 +66,16 @@ public class CartController {
 
     @RequestMapping(value = "delete", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> delete(HttpSession session, String productIds) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> delete(HttpServletRequest request, String productIds) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -56,8 +84,16 @@ public class CartController {
 
     @RequestMapping(value = "list", method = {RequestMethod.GET})
     @ResponseBody
-    public ServerResponse<CartVo> list(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> list(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -66,8 +102,16 @@ public class CartController {
 
     @RequestMapping(value = "select_all", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> selectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> selectAll(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -76,8 +120,16 @@ public class CartController {
 
     @RequestMapping(value = "un_select_all", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> unSelectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> unSelectAll(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -86,8 +138,16 @@ public class CartController {
 
     @RequestMapping(value = "select", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> select(HttpSession session, Integer productId) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> select(HttpServletRequest request, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -96,8 +156,16 @@ public class CartController {
 
     @RequestMapping(value = "un_select", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<CartVo> unSelect(HttpSession session, Integer productId) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<CartVo> unSelect(HttpServletRequest request, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -106,8 +174,16 @@ public class CartController {
 
     @RequestMapping(value = "cart_product_count", method = {RequestMethod.GET})
     @ResponseBody
-    public ServerResponse<Integer> cartProductCount(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<Integer> cartProductCount(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMsg("用户未登录");
+        }
+
+        String value = RedisPoolUtil.get(token);
+        User user = JsonUtil.strToObj(value, User.class);
+
         if (null == user) {
             return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

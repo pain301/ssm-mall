@@ -3,11 +3,11 @@ package com.pain.mall.service.impl;
 import com.pain.mall.common.Const;
 import com.pain.mall.common.ResponseCode;
 import com.pain.mall.common.ServerResponse;
-import com.pain.mall.common.TokenCache;
 import com.pain.mall.mapper.UserMapper;
 import com.pain.mall.pojo.User;
 import com.pain.mall.service.IUserService;
 import com.pain.mall.utils.MD5Util;
+import com.pain.mall.utils.RedisPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,8 +100,7 @@ public class UserService implements IUserService {
         int count = userMapper.checkAnswer(username, question, answer);
         if (0 < count) {
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(username,
-                    forgetToken);
+            RedisPoolUtil.setEx(Const.TOKEN_PREFIX + username, forgetToken, 15 * 60);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMsg("问题答案错误");
@@ -118,12 +117,13 @@ public class UserService implements IUserService {
             return ServerResponse.createByErrorMsg("用户名不存在");
         }
 
-        String token = TokenCache.getKey(username);
+        String token = RedisPoolUtil.get(Const.TOKEN_PREFIX + username);
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorMsg("Token 过期或失效");
         }
 
         if (StringUtils.equals(token, forgetToken)) {
+            RedisPoolUtil.delete(Const.TOKEN_PREFIX + username);
             String md5Password = MD5Util.MD5EncodeUtf8(password);
             int count = userMapper.updatePasswordByUsername(username, md5Password);
             if (count <= 0) {
