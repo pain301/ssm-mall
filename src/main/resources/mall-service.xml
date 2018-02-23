@@ -10,7 +10,14 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <!--annotation-config 为 true 表示可以对注解的类进行操作-->
     <context:component-scan base-package="com.pain.mall.service" annotation-config="true" />
+
+    <!--过滤对 controller 注解的扫描-->
+    <!--<context:component-scan base-package="com.pain.mall" annotation-config="true">-->
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />-->
+    <!--</context:component-scan>-->
+
 
     <import resource="mall-dao.xml" />
 

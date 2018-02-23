@@ -40,7 +40,8 @@
         </filter>
     </appender>
 
-    <logger name="com.pain.mall" additivity="false" level="INFO" >
+    <logger name="com.pain.mall" additivity="true" level="INFO" >
+        <appender-ref ref="error" />
         <appender-ref ref="mall" />
         <appender-ref ref="console" />
     </logger>
@@ -64,8 +65,7 @@
     <!--</logger>-->
 
     <root level="DEBUG">
-        <appender-ref ref="console" />
-        <appender-ref ref="error" />
+        <!--<appender-ref ref="console" />-->
     </root>
 
 </configuration>
