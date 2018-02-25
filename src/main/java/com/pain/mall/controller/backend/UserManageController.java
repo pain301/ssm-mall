@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 @RequestMapping("/manage/user")
-public class UserManagerController {
+public class UserManageController {
     @Autowired
     private IUserService userService;
 
@@ -31,6 +31,7 @@ public class UserManagerController {
         ServerResponse<User> response = userService.login(username, password);
         if (response.isSuccess()) {
             User user = response.getData();
+
             if (Const.Role.ROLE_ADMIN == user.getRole()) {
                 CookieUtil.writeLoginToken(res, session.getId());
                 RedisPoolUtil.setEx(session.getId(), JsonUtil.objToStr(response.getData()), Const.RedisCacheTime.REDIS_SESSION_TIME);

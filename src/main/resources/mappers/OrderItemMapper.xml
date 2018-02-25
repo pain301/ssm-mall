@@ -189,7 +189,7 @@
   <select id="getByOrderNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
-    FROM mall_order
+    FROM mall_order_item
     WHERE order_no = #{orderNo}
   </select>
 </mapper>

@@ -1,42 +1,43 @@
 package com.pain.mall.controller.backend;
 
-import com.github.pagehelper.PageInfo;
+import com.pain.mall.common.Const;
 import com.pain.mall.common.ResponseCode;
 import com.pain.mall.common.ServerResponse;
 import com.pain.mall.pojo.User;
-import com.pain.mall.service.IOrderService;
+import com.pain.mall.service.ICategoryService;
 import com.pain.mall.service.IUserService;
 import com.pain.mall.utils.CookieUtil;
 import com.pain.mall.utils.JsonUtil;
 import com.pain.mall.utils.RedisPoolUtil;
-import com.pain.mall.vo.OrderVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Administrator on 2017/10/13.
+ * Created by Administrator on 2017/6/12.
  */
 @Controller
-@RequestMapping("/manage/order/")
-public class OrderManageController {
+@RequestMapping(value = "/manage/category/")
+public class CategoryManageController {
 
     @Autowired
     private IUserService userService;
 
     @Autowired
-    private IOrderService orderService;
+    private ICategoryService categoryService;
 
-    @RequestMapping(value = "list")
+    @RequestMapping(value = "add_category", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse orderList(HttpServletRequest request,
-                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+    public ServerResponse addCategory(HttpServletRequest request,
+                                      String categoryName,
+                                      @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
+
 //        String token = CookieUtil.readLoginToken(request);
 //
 //        if (StringUtils.isBlank(token)) {
@@ -51,17 +52,19 @@ public class OrderManageController {
 //        }
 //
 //        if (userService.checkAdminRole(user).isSuccess()) {
-//            return orderService.manageList(pageNum, pageSize);
+//            return categoryService.addCategory(categoryName, parentId);
 //        } else {
 //            return ServerResponse.createByErrorMsg("无权限操作");
 //        }
 
-        return orderService.manageList(pageNum, pageSize);
+        return categoryService.addCategory(categoryName, parentId);
     }
 
-    @RequestMapping(value = "detail")
+    @RequestMapping(value = "set_category_name", method = {RequestMethod.POST})
     @ResponseBody
-    public ServerResponse<OrderVo> orderDetail(HttpServletRequest request, Long orderNo) {
+    public ServerResponse setCategoryName(HttpServletRequest request,
+                                          Integer categoryId,
+                                          String categoryName) {
 //        String token = CookieUtil.readLoginToken(request);
 //
 //        if (StringUtils.isBlank(token)) {
@@ -76,19 +79,18 @@ public class OrderManageController {
 //        }
 //
 //        if (userService.checkAdminRole(user).isSuccess()) {
-//            return orderService.manageDetail(orderNo);
+//            return categoryService.updateCategoryName(categoryId, categoryName);
 //        } else {
 //            return ServerResponse.createByErrorMsg("无权限操作");
 //        }
 
-        return orderService.manageDetail(orderNo);
+        return categoryService.updateCategoryName(categoryId, categoryName);
     }
 
-    @RequestMapping(value = "search")
+    @RequestMapping(value = "get_child_category", method = {RequestMethod.GET})
     @ResponseBody
-    public ServerResponse<PageInfo> orderSearch(HttpServletRequest request, Long orderNo,
-                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+    public ServerResponse getChildCategory(HttpServletRequest request,
+                                           @RequestParam(value = "categoryId", defaultValue = "0") int categoryId) {
 //        String token = CookieUtil.readLoginToken(request);
 //
 //        if (StringUtils.isBlank(token)) {
@@ -102,17 +104,18 @@ public class OrderManageController {
 //            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
 //        }
 //        if (userService.checkAdminRole(user).isSuccess()) {
-//            return orderService.manageSearch(orderNo, pageNum, pageSize);
+//            return categoryService.getChildCategory(categoryId);
 //        } else {
 //            return ServerResponse.createByErrorMsg("无权限操作");
 //        }
 
-        return orderService.manageSearch(orderNo, pageNum, pageSize);
+        return categoryService.getChildCategory(categoryId);
     }
 
-    @RequestMapping(value = "send_goods")
+    @RequestMapping(value = "get_deep_child_category", method = {RequestMethod.GET})
     @ResponseBody
-    public ServerResponse<String> orderSendGoods(HttpServletRequest request, Long orderNo) {
+    public ServerResponse getDeepChildCategory(HttpServletRequest request,
+                                              @RequestParam(value = "categoryId", defaultValue = "0") int categoryId) {
 //        String token = CookieUtil.readLoginToken(request);
 //
 //        if (StringUtils.isBlank(token)) {
@@ -125,12 +128,13 @@ public class OrderManageController {
 //        if (null == user) {
 //            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
 //        }
+//
 //        if (userService.checkAdminRole(user).isSuccess()) {
-//            return orderService.manageSendGoods(orderNo);
+//            return categoryService.getDeepChildCategory(categoryId);
 //        } else {
 //            return ServerResponse.createByErrorMsg("无权限操作");
 //        }
 
-        return orderService.manageSendGoods(orderNo);
+        return categoryService.getDeepChildCategory(categoryId);
     }
 }

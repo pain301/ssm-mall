@@ -50,4 +50,14 @@
         <property name="defaultEncoding" value="UTF-8" />
     </bean>
 
+    <!-- 拦截器 -->
+    <mvc:interceptors>
+        <!-- 若 bean 定义在最外层则会拦截所有 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/manage/**" />
+            <!--<mvc:exclude-mapping path="/manage/user/login" />-->
+            <bean class="com.pain.mall.controller.common.interceptor.AuthInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>
