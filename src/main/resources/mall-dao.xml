@@ -12,6 +12,9 @@
 
     <!--<aop:aspectj-autoproxy />-->
 
+    <!-- 单个配置文件 -->
+    <!--<context:property-placeholder location="classpath:datasource.properties" file-encoding="UTF-8" />-->
+
     <!-- 多个配置文件 -->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

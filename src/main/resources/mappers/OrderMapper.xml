@@ -222,10 +222,28 @@
     ORDER BY create_time DESC
   </select>
 
-  <select id="selectAll" resultMap="BaseResultMap" >
+  <select id="selectAll" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     FROM mall_order
     ORDER BY create_time DESC
   </select>
+
+  <select id="selectByStatusAndCreateTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM mall_order
+    WHERE status = #{status}
+    <![CDATA[
+    AND create_time <= #{createTime}
+    ]]>
+    ORDER BY create_time DESC
+  </select>
+
+  <update id="closeOrderById" parameterType="java.lang.Integer">
+    UPDATE
+    mall_product
+    SET status = 0
+    WHERE id = #{orderId}
+  </update>
 </mapper>

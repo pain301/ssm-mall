@@ -29,6 +29,7 @@ import com.pain.mall.vo.OrderVo;
 import com.pain.mall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -377,6 +378,30 @@ public class OrderService implements IOrderService {
         }
 
         return ServerResponse.createByErrorMsg("发货失败");
+    }
+
+    @Override
+    public void closeOrder(int hours) {
+        Date date = DateUtils.addHours(new Date(), -hours);
+        List<Order> orderList = orderMapper.selectByStatusAndCreateTime(Const.OrderStatus.NO_PAY.getCode(), DateTimeUtil.dateToStr(date));
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            for (OrderItem orderItem : orderItemList) {
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+
+                // TODO 商品已经被删除
+                if (null == stock) {
+                    continue;
+                }
+
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            orderMapper.closeOrderById(order.getId());
+            logger.info("关闭订单，orderNo：{}", order.getOrderNo());
+        }
     }
 
     private List<OrderVo> assembleOrderVoList(List<Order> orderList, Integer userId) {

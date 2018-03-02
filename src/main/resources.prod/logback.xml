@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
+    <property name="LOG_HOME" value="${CATALINA_HOME}/logs" />
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoding>UTF-8</encoding>
         <encoder>
@@ -12,7 +14,7 @@
     </appender>
 
     <appender name="mall" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>d:/log/mall.log</File>
+        <File>${LOG_HOME}/mall.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>d:/log/mall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <append>true</append>
@@ -24,7 +26,7 @@
     </appender>
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>d:/log/error.log</File>
+        <File>${LOG_HOME}/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>d:/log/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <append>true</append>
@@ -43,6 +45,7 @@
     <logger name="com.pain.mall" additivity="false" level="INFO" >
         <appender-ref ref="mall" />
         <appender-ref ref="console" />
+        <appender-ref ref="error" />
     </logger>
 
     <!-- mybatis log 日志 -->
@@ -63,9 +66,6 @@
     <!--<appender-ref ref="console"/>-->
     <!--</logger>-->
 
-    <root level="DEBUG">
-        <appender-ref ref="console" />
-        <appender-ref ref="error" />
-    </root>
+    <root level="DEBUG" />
 
 </configuration>

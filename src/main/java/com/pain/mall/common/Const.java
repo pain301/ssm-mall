@@ -37,6 +37,10 @@ public class Const {
         String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
     }
 
+    public interface RedisLock {
+        String ORDER_CLOSE_TASK_LOCK = "ORDER_CLOSE_TASK_LOCK";
+    }
+
     public enum ProductStatus {
         ON_SALE("在线", 1);
         private String value;
