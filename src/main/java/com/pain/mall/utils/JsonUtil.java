@@ -111,6 +111,10 @@ public class JsonUtil {
     }
 
     public static void main(String[] args) {
+        System.out.println(strToObj("4", int.class));
+    }
+
+    public static void main1(String[] args) {
         User user = new User();
         user.setId(1);
         user.setUsername("jack");
