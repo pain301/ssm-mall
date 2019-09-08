@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="phone1" class="com.pain.Phone"
+          p:brand="xiaoami"
+          p:price="314.1" />
+
+    <bean id="phone2" class="com.pain.Phone">
+        <constructor-arg index="0" type="java.lang.String" value="iphone" />
+        <constructor-arg index="1" type="double" value="677.7" />
+    </bean>
+
+    <bean id="phoneFactory" class="com.pain.PhoneFactory1" />
+    <bean id="phone3" factory-bean="phoneFactory" factory-method="createPhone" />
+    <bean id="phone4" class="com.pain.PhoneFactory2" factory-method="createPhone" />
+
+    <bean id="user" class="com.pain.User"
+          p:phone-ref="phone1"
+          p:userName="pain" />
+</beans>
